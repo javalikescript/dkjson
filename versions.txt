@@ -1,3 +1,13 @@
+Version 2.7 (2024-02-20)
+===========
+
+Changes since version 2.6:
+
+  *  Enable working with newer versions of LPeg where the "version" field
+     is no longer a function.
+  *  Fix error messages when an encoding error happens in an ordered
+     dictionary.
+
 Version 2.6 (2021-12-19)
 ===========
 

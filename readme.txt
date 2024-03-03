@@ -1,7 +1,7 @@
 David Kolf's JSON module for Lua 5.1 - 5.4
 ==========================================
 
-*Version 2.6*
+*Version 2.7*
 
 In the default configuration this module writes no global values, not even
 the module table. Import it using
@@ -119,7 +119,7 @@ You can use this value for setting explicit `null` values.
 `json.version`
 --------------
 
-Set to `"dkjson 2.6"`.
+Set to `"dkjson 2.7"`.
 
 `json.quotestring (string)`
 ---------------------------
@@ -181,7 +181,7 @@ domain 'dkolf.de'.
 
 ---------------------------------------------------------------------
 
-*Copyright (C) 2010-2021 David Heiko Kolf*
+*Copyright (C) 2010-2024 David Heiko Kolf*
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

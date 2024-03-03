@@ -332,6 +332,13 @@ else
         print("unexpected keyorder:", r)
       end
     end
+
+    do -- error handling in ordered keys
+      local r, x = pcall(dkencode, {a = false, b = function () end, c = true}, {keyorder = {"a", "b", "c"}})
+      if r or x ~= "type 'function' is not supported by JSON." then
+        print("expected default error for type exception, but got:", r, x)
+      end
+    end
   end
 end
 

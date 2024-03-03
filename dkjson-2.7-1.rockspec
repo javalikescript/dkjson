@@ -1,8 +1,8 @@
 package = "dkjson"
-version = "2.6-1"
+version = "2.7-1"
 source = {
-  url = "http://dkolf.de/src/dkjson-lua.fsl/tarball/dkjson-2.6.tar.gz?uuid=release_2_6",
-  file = "dkjson-2.6.tar.gz"
+  url = "http://dkolf.de/dkjson-lua/dkjson-2.7.tar.gz",
+  file = "dkjson-2.7.tar.gz"
 }
 description = {
   summary = "David Kolf's JSON module for Lua",
@@ -15,7 +15,7 @@ on the syntax for JavaScript data structures.
 dkjson is written in Lua without any dependencies, but
 when LPeg is available dkjson can use it to speed up decoding.
 ]],
-  homepage = "http://dkolf.de/src/dkjson-lua.fsl/",
+  homepage = "http://dkolf.de/dkjson-lua/",
   license = "MIT/X11"
 }
 dependencies = {
