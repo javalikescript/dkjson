@@ -1,204 +1,141 @@
-David Kolf's JSON module for Lua 5.1 - 5.4
-==========================================
+Version 2.8 (2024-06-17)
+===========
 
-*Version 2.8*
+Changes since version 2.7:
+  *  Fix handling of decoding errors when Lua is compiled with LUA_NOCVTN2S.
 
-In the default configuration this module writes no global values, not even
-the module table. Import it using
+Version 2.7 (2024-02-20)
+===========
 
-    json = require ("dkjson")
+Changes since version 2.6:
 
-In environments where `require` or a similiar function are not available
-and you cannot receive the return value of the module, you can set the
-option `register_global_module_table` to `true`.  The module table will
-then be saved in the global variable with the name given by the option
-`global_module_name`.
+  *  Enable working with newer versions of LPeg where the "version" field
+     is no longer a function.
+  *  Fix error messages when an encoding error happens in an ordered
+     dictionary.
 
-Exported functions and values:
+Version 2.6 (2021-12-19)
+===========
 
-`json.encode (object [, state])`
---------------------------------
+Changes since version 2.5:
 
-Create a string representing the object. `Object` can be a table,
-a string, a number, a boolean, `nil`, `json.null` or any object with
-a function `__tojson` in its metatable. A table can only use strings
-and numbers as keys and its values have to be valid objects as
-well. It raises an error for any invalid data types or reference
-cycles.
+  *  The decode function is no longer automatically replaced by the version
+     implemented using LPeg, but an LPeg-enabled copy of the module has to
+     be requested explicitly with the function use_lpeg.
+     This was changed to improve the predictability of the code and make
+     audits more reliable.
+  *  The LPeg-version of the decode function now reports unterminated
+     strings, arrays and objects with the position where they started
+     rather than where parsing failed which was usually at the end of the
+     input string.  This was already the behavior of the
+     pure-Lua-implementation.
+  *  Fixed a bug where entries in a dictionary were not put in the desired
+     order when their value was the boolean false.
 
-`state` is an optional table with the following fields:
+Version 2.5 (2014-04-28)
+===========
 
-  - `indent`  
-    When `indent` (a boolean) is set, the created string will contain
-    newlines and indentations. Otherwise it will be one long line.
-  - `keyorder`  
-    `keyorder` is an array to specify the ordering of keys in the
-    encoded output. If an object has keys which are not in this array
-    they are written after the sorted keys.
-  - `level`  
-    This is the initial level of indentation used when `indent` is
-    set. For each level two spaces are added. When absent it is set
-    to 0.
-  - `buffer`  
-    `buffer` is an array to store the strings for the result so they
-    can be concatenated at once. When it isn't given, the encode
-    function will create it temporary and will return the
-    concatenated result.
-  - `bufferlen`  
-    When `bufferlen` is set, it has to be the index of the last
-    element of `buffer`.
-  - `tables`  
-    `tables` is a set to detect reference cycles. It is created
-    temporary when absent. Every table that is currently processed
-    is used as key, the value is `true`.
-  - `exception`  
-    When `exception` is given, it will be called whenever the encoder
-    cannot encode a given value.  
-    The parameters are `reason`, `value`, `state` and `defaultmessage`.
-    `reason` is either `"reference cycle"`, `"custom encoder failed"` or
-    `"unsupported type"`. `value` is the original value that caused the
-    exception, `state` is this state table, `defaultmessage` is the message
-    of the error that would usually be raised.  
-    You can either return `true` and add directly to the buffer or you can
-    return the string directly. To keep raising an error return `nil` and
-    the desired error message.  
-    An example implementation for an exception function is given in
-    `json.encodeexception`.
+Changes since version 2.4:
 
-When `state.buffer` was set, the return value will be `true` on
-success. Without `state.buffer` the return value will be a string.
+  *  Added customizable exception handling.
+  *  Decode input that contains JavaScript comments.
 
-`json.decode (string [, position [, null]])`
---------------------------------------------
+Version 2.4 (2013-09-28)
+===========
 
-Decode `string` starting at `position` or at 1 if `position` was
-omitted.
+Changes since version 2.3:
 
-`null` is an optional value to be returned for null values. The
-default is `nil`, but you could set it to `json.null` or any other
-value.
+  *  Fixed encoding and decoding of numbers in different numeric locales.
+  *  Prevent using version 0.11 of LPeg (causes segmentation faults on
+     some systems).
 
-The return values are the object or `nil`, the position of the next
-character that doesn't belong to the object, and in case of errors
-an error message.
+Version 1.3 (2013-09-28)
+===========
 
-Two metatables are created. Every array or object that is decoded gets
-a metatable with the `__jsontype` field set to either `array` or
-`object`. If you want to provide your own metatables use the syntax
+Changes since version 1.2:
 
-    json.decode (string, position, null, objectmeta, arraymeta)
+  *  Fixed encoding and decoding of numbers in different numeric locales.
 
-To prevent the assigning of metatables pass `nil`:
+Version 2.3 (2013-04-14)
+===========
 
-    json.decode (string, position, null, nil)
+Changes since version 2.2:
 
-`<metatable>.__jsonorder`
--------------------------
+  *  Corrected the range of escaped characters.  Among other characters
+     U+2029 was missing, which would cause trouble when parsed by a
+     JavaScript interpreter.
+  *  Added options to register the module table in a global variable.
+     This is useful in environments where functions similar to require are
+     not available.
 
-`__jsonorder` can overwrite the `keyorder` for a specific table.
+Version 1.2 (2013-04-14)
+===========
 
-`<metatable>.__jsontype`
-------------------------
+Changes since version 1.1:
 
-`__jsontype` can be either `"array"` or `"object"`. This value is only
-checked for empty tables. (The default for empty tables is `"array"`).
+  *  Corrected the range of escaped characters.  Among other characters
+     U+2029 was missing, which would cause trouble when parsed by a
+     JavaScript interpreter.
+  *  Locations for error messages were off by one in the first line.
 
-`<metatable>.__tojson (self, state)`
-------------------------------------
+Version 2.2 (2012-04-28)
+===========
 
-You can provide your own `__tojson` function in a metatable. In this
-function you can either add directly to the buffer and return true,
-or you can return a string. On errors nil and a message should be
-returned.
+Changes since version 2.1:
 
-`json.null`
------------
+  *  __jsontype is only used for empty tables.
+  *  It is possible to decode tables without assigning metatables.
+  *  Locations for error messages were off by one in the first line.
+  *  There is no LPeg version of json.quotestring anymore.
 
-You can use this value for setting explicit `null` values.
+Version 2.1 (2011-07-08)
+===========
 
-`json.version`
---------------
+Changes since version 2.0:
 
-Set to `"dkjson 2.8"`.
+  *  Changed the documentation to Markdown format.
+  *  LPeg is now parsing only a single value at a time to avoid running
+     out of Lua stack for big arrays and objects.
+  *  Read __tojson, __jsontype and __jsonorder even from blocked metatables
+     through the debug module.
+  *  Fixed decoding single numbers (only affected the non-LPeg mode).
+  *  Corrected the range of escaped Unicode control characters.
 
-`json.quotestring (string)`
----------------------------
+Version 1.1 (2011-07-08)
+===========
 
-Quote a UTF-8 string and escape critical characters using JSON
-escape sequences. This function is only necessary when you build
-your own `__tojson` functions.
+Changes since version 1.0:
 
-`json.addnewline (state)`
--------------------------
+  *  The values NaN/+Inf/-Inf are recognised and encoded as "null" like in
+     the original JavaScript implementation.
+  *  Read __tojson even from blocked metatables through the debug module.
+  *  Fixed decoding single numbers.
+  *  Corrected the range of escaped Unicode control characters.
 
-When `state.indent` is set, add a newline to `state.buffer` and spaces
-according to `state.level`.
+Version 2.0 (2011-05-31)
+===========
 
-`json.encodeexception (reason, value, state, defaultmessage)`
--------------------------------------------------------------
+Changes since version 1.0:
 
-This function can be used as value to the `exception` option. Instead of
-raising an error this function encodes the error message as a string. This
-can help to debug malformed input data.
+  *  Optional LPeg support.
+  *  Invalid input data for encoding raises errors instead of returning nil
+     and the error message. (Invalid data for encoding is usually a
+     programming error. Raising an error removes the work of explicitly
+     checking the result).
+  *  The metatable field __jsontype can control whether a Lua table is
+     encoded as a JSON array or object. (Mainly useful for empty tables).
+  *  When decoding, two metatables are created. One is used to mark the arrays
+     while the other one is used for the objects. (The metatables are
+     created once for each decoding operation to make sandboxing possible.
+     However, you can specify your own metatables as arguments).
+  *  There are no spaces added any longer when encoding.
+  *  It is possible to explicitly sort keys for encoding by providing an array with key
+     names to the option "keyorder" or the metatable field __jsonorder.
+  *  The values NaN/+Inf/-Inf are recognised and encoded as "null" like in
+     the original JavaScript implementation.
 
-    x = json.encode(value, { exception = json.encodeexception })
+Version 1.0
+===========
 
-LPeg support
-------------
+Initial version, released 2010-08-28.
 
-When the local configuration variable `always_use_lpeg` is set,
-this module tries to load LPeg to replace the `decode` function. The
-speed increase is significant. You can get the LPeg module at
-  <http://www.inf.puc-rio.br/~roberto/lpeg/>.
-
-Without changing the module configuration you can get LPeg support by
-calling the function `use_lpeg`:
-
-### `json.use_lpeg ()`
-
-Require the LPeg module and return a copy of the module table where the
-`decode` function was replaced by a version that uses LPeg:
-
-    json = require "dkjson".use_lpeg()
-
-Without the configuration to always use LPEG the original module table is
-unchanged and still available by calls to
-
-    json = require "dkjson"
-
-### `json.using_lpeg`
-
-This variable is set to `true` in the copy of the module table that uses
-LPeg support.
-
----------------------------------------------------------------------
-
-Contact
--------
-
-You can contact the author by sending an e-mail to 'david' at the
-domain 'dkolf.de'.
-
----------------------------------------------------------------------
-
-*Copyright (C) 2010-2024 David Heiko Kolf*
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
