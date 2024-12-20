@@ -1,13 +1,12 @@
-This is the LUA dkjson module from [http://dkolf.de/dkjson-lua](http://dkolf.de/dkjson-lua)
-
+This is the Lua dkjson module from [http://dkolf.de/dkjson-lua](http://dkolf.de/dkjson-lua)
 
 ## Introduction
 
-This is a JSON module written in** **[Lua](http://www.lua.org/). It supports UTF-8.
+This is a JSON module written in [Lua](http://www.lua.org/). It supports UTF-8.
 
 [JSON (JavaScript Object Notation)](http://www.json.org/) is a format for serializing data based on the syntax for JavaScript data structures. It is an ideal format for transmitting data between different applications and commonly used for dynamic web pages. It can also be used to save Lua data structures, but you should be aware that not every Lua table can be represented by the JSON standard. For example tables that contain both string keys and an array part cannot be exactly represented by JSON. You can solve this by putting your array data in an explicit subtable.
 
-dkjson is written in Lua without any dependencies, but when** **[LPeg](http://www.inf.puc-rio.br/~roberto/lpeg/) is available dkjson can use it to speed up decoding.
+dkjson is written in Lua without any dependencies, but when [LPeg](http://www.inf.puc-rio.br/~roberto/lpeg/) is available dkjson can use it to speed up decoding.
 
 ## Download
 
@@ -15,7 +14,7 @@ dkjson is written in Lua without any dependencies, but when** **[LPeg](http://ww
 
 ## Usage
 
-The full** **[documentation including the license](http://dkolf.de/dkjson-lua/documentation) is available online on this website or as Markdown text in the readme.txt file.
+The full [documentation including the license](http://dkolf.de/dkjson-lua/documentation) is available online on this website or as Markdown text in the readme.txt file.
 
 dkjson is free software released under the same conditions as the Lua interpreter. Please remember to mention external code you are using in your software.
 
@@ -23,7 +22,7 @@ dkjson is free software released under the same conditions as the Lua interprete
 
 ### Encoding
 
-```
+```lua
 
 local json = require ("dkjson")
 
@@ -41,7 +40,7 @@ print (str)
 
 #### Output
 
-```
+```json
 
 {
   "bugs":null,
@@ -52,7 +51,7 @@ print (str)
 
 ### Decoding
 
-```
+```lua
 
 local json = require ("dkjson")
 
