@@ -1,3 +1,9 @@
+Version 2.8 (2024-06-17)
+===========
+
+Changes since version 2.7:
+  *  Fix handling of decoding errors when Lua is compiled with LUA_NOCVTN2S.
+
 Version 2.7 (2024-02-20)
 ===========
 
